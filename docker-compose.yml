@@ -1,0 +1,41 @@
+# services:
+#   postgres:
+#     image: postgres:16
+#     container_name: postgres
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: postgres
+#       POSTGRES_DB: fable-to-table
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     ports:
+#       - "5432:5432"
+
+#   app:
+#     build: .
+#     container_name: app
+#     env_file:
+#       - .env
+#     environment:
+#       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/fable-to-table?schema=public
+#     depends_on:
+#       - postgres
+#     ports:
+#       - "3000:3000"
+
+# volumes:
+#   postgres_data:
+
+services:
+  postgres:
+    container_name: fable-to-table
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fable-to-table
+      PGDATA: /data/pgdata
+    volumes:
+      - .data/pg:/data/postgres
