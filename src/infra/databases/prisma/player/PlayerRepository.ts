@@ -1,13 +1,13 @@
 import { Player } from '@modules/player/entities/Player';
-import { PlayerRepository } from '@modules/player/repositories/PlayerRepository';
+import { PlayerRepository } from '@modules/player/repositories/contracts/PlayerRepository';
 import { Injectable } from '@nestjs/common';
-import { Player as PlayerPrisma } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
-import { PlayerMapper } from './playerMapper';
+import { PlayerMapper } from './PlayerMapper';
 
 @Injectable()
 export class PlayerRepositoryImplementation implements PlayerRepository {
   constructor(private readonly prisma: PrismaService) {}
+
   async findUniqueById(id: number): Promise<Player | null> {
     const player = await this.prisma.player.findUnique({
       where: {
@@ -41,23 +41,13 @@ export class PlayerRepositoryImplementation implements PlayerRepository {
     });
   }
 
-  async findUniqueByNickName(nickname: string): Promise<Player | null> {
+  async findUniqueByName(name: string): Promise<Player | null> {
     const player = await this.prisma.player.findUnique({
       where: {
-        nickname,
+        name,
       },
     });
 
     return player ? PlayerMapper.toEntity(player) : null;
-  }
-
-  async findManyByGameId(gameId: number): Promise<Player[]> {
-    const players = await this.prisma.player.findMany({
-      where: {
-        gameId,
-      },
-    });
-
-    return players.map((player: PlayerPrisma) => PlayerMapper.toEntity(player));
   }
 }
