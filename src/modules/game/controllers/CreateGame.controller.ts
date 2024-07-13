@@ -5,7 +5,7 @@ import { CurrentLoggedPlayer } from '@providers/auth/decorators/CurrentLoggedPla
 import { TokenPayloadSchema } from '@providers/auth/strategys/jwtStrategy';
 import { statusCode } from '@shared/core/types/statusCode';
 import { CreateGameDTO } from '../dto/CreateGameDTO';
-import { CreateGameGateway } from '../gateways/CreatePlayer.gateway';
+import { CreateGameGateway } from '../gateways/CreateGame.gateway';
 import { CreateGameService } from '../services/CreateGame.service';
 
 @ApiTags('Game')
