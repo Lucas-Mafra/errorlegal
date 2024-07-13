@@ -5,5 +5,5 @@ export abstract class Decoder {
   abstract decrypt(
     token: string,
     options?: JwtSignOptions,
-  ): Promise<{ payload?: TokenPayloadSchema; isValid: boolean }>
+  ): Promise<{ payload?: TokenPayloadSchema; isValid: boolean }>;
 }
