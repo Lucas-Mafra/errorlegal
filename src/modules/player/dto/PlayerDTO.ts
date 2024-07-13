@@ -8,14 +8,17 @@ export class PlayerDTO {
   updatedAt!: Date | null;
 
   @IsString()
-  nickname!: string;
+  name!: string;
 
   @IsString()
   password!: string;
 
-  @IsNumber()
-  gameId!: number | null;
+  @IsString()
+  masterName!: string | null;
 
   @IsNumber()
-  roleId!: number;
+  characters!: number[];
+
+  @IsNumber()
+  gamesAsMaster!: number[];
 }
