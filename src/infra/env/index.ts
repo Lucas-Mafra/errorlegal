@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import { z } from 'zod';
-config(); // Carrega as variáveis do arquivo .env
+config();
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(7777),
@@ -8,7 +8,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['dev', 'production']).default('production'),
   JWT_PRIVATE_KEY: z.string(),
   JWT_PUBLIC_KEY: z.string(),
-  DAYS_TO_EXPIRES_REFRESH_TOKEN: z.coerce.number().default(7),
+  JWT_USER_ACCESS_EXPIRES_IN: z.string(),
+  JWT_USER_REFRESH_EXPIRES_IN: z.string(),
+  PLAYER_REFRESH_EXPIRES_IN: z.coerce.number(),
 });
 
 type EnvSchema = z.infer<typeof envSchema>;
