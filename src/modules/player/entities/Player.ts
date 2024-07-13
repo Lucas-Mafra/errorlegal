@@ -1,19 +1,23 @@
-import { Entity } from '@shared/core/Entities/Entity';
+import { AggregateRoot } from '@shared/core/Entities/AggregateRoot';
 import { Optional } from '@shared/core/types/Optional';
 import { PlayerDTO } from '../dto/PlayerDTO';
 
-export class Player extends Entity<PlayerDTO> {
+export class Player extends AggregateRoot<PlayerDTO> {
   constructor(
-    props: Optional<PlayerDTO, 'createdAt' | 'updatedAt' | 'gameId'>,
+    props: Optional<
+      PlayerDTO,
+      'createdAt' | 'updatedAt' | 'masterName' | 'characters' | 'gamesAsMaster'
+    >,
     id?: number,
   ) {
     const playerProps: PlayerDTO = {
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? null,
-      nickname: props.nickname,
+      name: props.name,
       password: props.password,
-      gameId: props.gameId ?? null,
-      roleId: props.roleId ?? null,
+      masterName: props.masterName ?? null,
+      characters: props.characters ?? [],
+      gamesAsMaster: props.gamesAsMaster ?? [],
     };
 
     super(playerProps, id);
@@ -27,12 +31,12 @@ export class Player extends Entity<PlayerDTO> {
     return this.props.updatedAt;
   }
 
-  get nickname() {
-    return this.props.nickname;
+  get name() {
+    return this.props.name;
   }
 
-  set nickname(nickname: string) {
-    this.props.nickname = nickname;
+  set name(name: string) {
+    this.props.name = name;
     this.touch();
   }
 
@@ -45,23 +49,39 @@ export class Player extends Entity<PlayerDTO> {
     this.touch();
   }
 
-  get gameId() {
-    if (this.props.gameId === null) {
-      throw new Error('gameId is null');
-    }
-    return this.props.gameId;
+  get masterName() {
+    return this.props.masterName;
   }
 
-  set gameId(gameId: number) {
-    this.props.gameId = gameId;
+  set masterName(masterName: string | null) {
+    this.props.masterName = masterName;
     this.touch();
   }
 
-  get roleId() {
-    return this.props.roleId;
+  get characters() {
+    return this.props.characters;
+  }
+
+  get gamesAsMaster() {
+    return this.props.gamesAsMaster;
   }
 
   touch() {
     this.props.updatedAt = new Date();
   }
 }
+
+// Eventos de domínio
+// class CharacterAddedToPlayerEvent implements DomainEvent {
+//   constructor(
+//     public readonly playerId: number,
+//     public readonly characterId: number,
+//   ) {}
+// }
+
+// class CharacterRemovedFromPlayerEvent implements DomainEvent {
+//   constructor(
+//     public readonly playerId: number,
+//     public readonly characterId: number,
+//   ) {}
+// }
