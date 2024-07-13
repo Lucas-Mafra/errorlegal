@@ -175,3 +175,8 @@ dist
 # bun
 
 bun.\*
+bun.lockb
+private_key_base64.pem
+private_key.pem
+public_key_base64.pem
+public_key.pem
