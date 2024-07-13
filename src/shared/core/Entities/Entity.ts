@@ -7,7 +7,7 @@
  * The ID can be accessed using the `id` getter method.
  */
 export abstract class Entity<T> {
-  private _id: number | undefined; // Use `undefined` initially since ID will be assigned by the database.
+  private _id: number; // Use `undefined` initially since ID will be assigned by the database.
   protected props: T;
 
   /**
@@ -17,7 +17,7 @@ export abstract class Entity<T> {
    */
   protected constructor(props: T, id?: number) {
     this.props = props;
-    this._id = id;
+    this._id = id as number;
   }
 
   /**
