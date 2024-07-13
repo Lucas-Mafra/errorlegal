@@ -14,6 +14,7 @@
     "rootDir": "./src",
     "resolveJsonModule": true,
     "baseUrl": "./src",
+    "emitDecoratorMetadata": true,
     "paths": {
       "@shared/*": ["./shared/*"],
       "@infra/*": ["./infra/*"],
@@ -22,7 +23,7 @@
       "@constants/*": ["./constants/*"],
       "@modules/*": ["./modules/*"],
       "@providers/*": ["./providers/*"],
-      "@test/*": ["./test/*"]
+      "@test/*": ["./test/*"],
     }
   },
   "include": ["src/**/*.ts"],
