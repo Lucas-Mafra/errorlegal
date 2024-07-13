@@ -8,7 +8,7 @@ import { JwtStrategy } from './strategys/jwtStrategy';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'auth0' }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       global: true,
       useFactory() {
