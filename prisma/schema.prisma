@@ -7,28 +7,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id         Int      @id @unique @default(autoincrement())
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  nickname   String   @unique
-  password   String   @map("password")
-  masterName String?  @unique @map("master_name")
+model Player {
+  id         Int       @id @unique @default(autoincrement())
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime? @updatedAt @map("updated_at")
+  name       String    @unique
+  password   String    @map("password")
+  masterName String?   @unique @map("master_name")
 
   characters    Character[]
-  gamesAsMaster Game[]      @relation("MasterGames")
+  gamesAsMaster Game[]         @relation("MasterGames")
+  RefreshToken  RefreshToken[]
+
+  @@map("players")
 }
 
 model Character {
-  id        Int      @id @unique @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  userId    Int      @map("user_id")
-  gameId    Int      @map("game_id")
+  id        Int       @id @unique @default(autoincrement())
+  nickname  String    @unique
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+  playerId  Int       @map("player_id")
+  gameId    Int       @map("game_id")
 
-  User User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Game Game @relation(fields: [gameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Player Player @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("characters")
+}
+
+model RefreshToken {
+  id        Int      @id @unique @default(autoincrement())
+  token     String
+  expiresIn DateTime @map("expires_in")
+  createdAt DateTime @default(now()) @map("created_at")
+  playerId  Int      @map("player_id")
+
+  Player Player @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("refresh_tokens")
 }
 
 model Game {
@@ -39,5 +56,7 @@ model Game {
   masterId  Int      @map("master_id")
 
   characters Character[]
-  master     User        @relation("MasterGames", fields: [masterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  master     Player      @relation("MasterGames", fields: [masterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("games")
 }
