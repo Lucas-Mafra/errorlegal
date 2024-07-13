@@ -16,7 +16,7 @@ model Player {
   masterName String?   @unique @map("master_name")
 
   characters    Character[]
-  gamesAsMaster Game[]         @relation("MasterGames")
+  gamesAsMaster Game[]
   RefreshToken  RefreshToken[]
 
   @@map("players")
@@ -49,14 +49,20 @@ model RefreshToken {
 }
 
 model Game {
-  id        Int      @id @unique @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  masterId  Int      @map("master_id")
+  id            Int       @id @unique @default(autoincrement())
+  inviteCode    String    @unique @default(cuid()) @map("invite_code")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime? @updatedAt @map("updated_at")
+  name          String
+  description   String    @map("description")
+  imageUrl      String?   @map("image_url")
+  isActive      Boolean   @default(true) @map("is_active")
+  totalPlayers  Int       @map("total_players")
+  activePlayers Int       @map("active_players")
+  masterId      Int       @map("master_id")
 
   characters Character[]
-  master     Player      @relation("MasterGames", fields: [masterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  master     Player      @relation(fields: [masterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("games")
 }
