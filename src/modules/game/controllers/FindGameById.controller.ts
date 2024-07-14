@@ -4,8 +4,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { CurrentLoggedPlayer } from '@providers/auth/decorators/CurrentLoggedPlayer.decorator';
 import { TokenPayloadSchema } from '@providers/auth/strategys/jwtStrategy';
 import { statusCode } from '@shared/core/types/statusCode';
-import { FindGameByIdDTO } from '../dto/FindGameByIdDTO';
-import { FindGameByIdGateway } from '../gateways/FindGameById.gateway';
 import { GamerPresenter } from '../presenters/Game.presenter';
 import { FindGameByIdService } from '../services/FindGameById.service';
 
@@ -18,11 +16,11 @@ export class FindGameByIdController {
   @HttpCode(statusCode.OK)
   async handle(
     @CurrentLoggedPlayer() { sub }: TokenPayloadSchema,
-    @Param('gameId', FindGameByIdGateway) param: FindGameByIdDTO,
+    @Param('gameId') param: string,
   ) {
     const result = await this.findGameByIdService.execute({
       sub,
-      gameId: param.gameId,
+      gameId: Number(param),
     });
 
     if (result.isLeft()) {
