@@ -31,13 +31,15 @@ export class FindGameByIdService implements Service<Request, Errors, Response> {
       return left(new PlayerNotFoundError());
     }
 
-    const isMaster = player.gamesAsMaster.some(
-      (game) => game.toString() === gameId.toString(),
-    );
+    // const isMaster = player.gamesAsMaster.some(
+    //   (game) => game.toString() === gameId.toString(),
+    // );
 
-    if (!isMaster) {
-      return left(new IsNotMasterError());
-    }
+    // console.log(player.gamesAsMaster);
+
+    // if (!isMaster) {
+    //   return left(new IsNotMasterError());
+    // }
 
     const game = await this.gameRepository.findUniqueById(gameId);
 
