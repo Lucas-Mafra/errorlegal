@@ -1,3 +1,4 @@
+import { CharacterModule } from '@modules/character/Character.module';
 import { GameModule } from '@modules/game/Game.module';
 import { PlayerModule } from '@modules/player/Player.module';
 import { Module } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { CryptographyModule } from '@providers/cryptography/Cryptography.module'
     CryptographyModule,
     PlayerModule,
     GameModule,
+    CharacterModule,
   ],
 })
 export class AppModule {}

@@ -1,4 +1,4 @@
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import { IsDate, IsString } from 'class-validator';
 
 export class PlayerDTO {
   @IsDate()
@@ -15,10 +15,4 @@ export class PlayerDTO {
 
   @IsString()
   masterName!: string | null;
-
-  @IsNumber()
-  characters!: number[];
-
-  @IsNumber()
-  gamesAsMaster!: number[];
 }

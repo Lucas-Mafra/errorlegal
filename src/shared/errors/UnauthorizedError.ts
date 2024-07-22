@@ -1,7 +1,7 @@
 import { ServiceError } from '@shared/core/errors/ServiceError';
 import { statusCode } from '@shared/core/types/statusCode';
 
-export class IsNotMasterError extends Error implements ServiceError {
+export class UnauthorizedError extends Error implements ServiceError {
   statusCode: number = statusCode.FORBIDDEN;
 
   constructor() {

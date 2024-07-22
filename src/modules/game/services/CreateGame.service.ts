@@ -6,8 +6,9 @@ import { Either, left, right } from '@shared/core/errors/Either';
 import { CreateGameDTO } from '../dto/CreateGameDTO';
 import { Game } from '../entities/Game';
 import { GameRepository } from '../repositories/contracts/GameRepository';
+import { TokenPayloadSchema } from './../../../providers/auth/strategys/jwtStrategy';
 
-type Request = CreateGameDTO;
+type Request = TokenPayloadSchema & CreateGameDTO;
 
 type Errors = PlayerNotFoundError;
 
@@ -26,9 +27,10 @@ export class CreateGameService implements Service<Request, Errors, Response> {
     name,
     description,
     imageUrl,
-    masterId,
-  }: CreateGameDTO): Promise<Either<Errors, Response>> {
-    const player = await this.playerRepository.findUniqueById(masterId);
+    sub,
+  }: Request): Promise<Either<Errors, Response>> {
+    console.log({ name, description, imageUrl, sub });
+    const player = await this.playerRepository.findUniqueById(sub);
 
     if (!player) {
       return left(new PlayerNotFoundError());
@@ -38,10 +40,11 @@ export class CreateGameService implements Service<Request, Errors, Response> {
       name,
       description,
       imageUrl,
-      masterId,
+      masterId: sub,
     });
 
-    await this.gameRepository.create(game);
+    const _game = await this.gameRepository.create(game);
+    await this.gameRepository.addPlayerToGame(sub, _game.id);
 
     return right({
       game,

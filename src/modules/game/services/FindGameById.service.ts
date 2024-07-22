@@ -4,14 +4,16 @@ import { Injectable } from '@nestjs/common';
 import { TokenPayloadSchema } from '@providers/auth/strategys/jwtStrategy';
 import { Service } from '@shared/core/contracts/Service';
 import { Either, left, right } from '@shared/core/errors/Either';
+import { UnauthorizedError } from '@shared/errors/UnauthorizedError';
+import { isMaster } from 'utils/isMaster';
 import { FindGameByIdDTO } from '../dto/FindGameByIdDTO';
 import { Game } from '../entities/Game';
-import { IsNotMasterError } from '../errors/IsNotMasterError';
+import { GameNotFoundError } from '../errors/GameNotFoundError';
 import { GameRepository } from '../repositories/contracts/GameRepository';
 
 type Request = FindGameByIdDTO & TokenPayloadSchema;
 
-type Errors = PlayerNotFoundError | IsNotMasterError;
+type Errors = PlayerNotFoundError | GameNotFoundError | UnauthorizedError;
 
 type Response = {
   game: Game;
@@ -31,20 +33,14 @@ export class FindGameByIdService implements Service<Request, Errors, Response> {
       return left(new PlayerNotFoundError());
     }
 
-    // const isMaster = player.gamesAsMaster.some(
-    //   (game) => game.toString() === gameId.toString(),
-    // );
-
-    // console.log(player.gamesAsMaster);
-
-    // if (!isMaster) {
-    //   return left(new IsNotMasterError());
-    // }
-
-    const game = await this.gameRepository.findUniqueById(gameId);
+    const game = await this.gameRepository.findUniqueById(Number(gameId));
 
     if (!game) {
-      return left(new PlayerNotFoundError());
+      return left(new GameNotFoundError());
+    }
+
+    if (!isMaster({ masterId: game.masterId, playerId: sub })) {
+      return left(new UnauthorizedError());
     }
 
     return right({

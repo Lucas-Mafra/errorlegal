@@ -4,13 +4,14 @@ import { Injectable } from '@nestjs/common';
 import { TokenPayloadSchema } from '@providers/auth/strategys/jwtStrategy';
 import { Service } from '@shared/core/contracts/Service';
 import { Either, left, right } from '@shared/core/errors/Either';
+import { UnauthorizedError } from '@shared/errors/UnauthorizedError';
+import { isMaster } from 'utils/isMaster';
 import { UpdateGameDTO } from '../dto/UpdateGameDTO';
-import { IsNotMasterError } from '../errors/IsNotMasterError';
 import { GameRepository } from '../repositories/contracts/GameRepository';
 
 type Request = UpdateGameDTO & TokenPayloadSchema;
 
-type Errors = PlayerNotFoundError | IsNotMasterError;
+type Errors = PlayerNotFoundError | UnauthorizedError;
 
 type Response = null;
 
@@ -34,18 +35,14 @@ export class UpdateGameService implements Service<Request, Errors, Response> {
       return left(new PlayerNotFoundError());
     }
 
-    const isMaster = player.gamesAsMaster.some(
-      (game) => game.toString() === gameId.toString(),
-    );
-
-    if (!isMaster) {
-      return left(new IsNotMasterError());
-    }
-
     const game = await this.gameRepository.findUniqueById(gameId);
 
     if (!game) {
       return left(new PlayerNotFoundError());
+    }
+
+    if (!isMaster({ masterId: game.masterId, playerId: sub })) {
+      return left(new UnauthorizedError());
     }
 
     game.description = description;

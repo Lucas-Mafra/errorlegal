@@ -16,7 +16,7 @@ export class Game extends AggregateRoot<GameDTO> {
     >,
     id?: number,
   ) {
-    const playerProps: GameDTO = {
+    const gameProps: GameDTO = {
       createdAt: props.createdAt ?? new Date(),
       updatedAt: props.updatedAt ?? null,
       name: props.name,
@@ -29,7 +29,7 @@ export class Game extends AggregateRoot<GameDTO> {
       inviteCode: props.inviteCode ?? '',
     };
 
-    super(playerProps, id);
+    super(gameProps, id);
   }
 
   get createdAt() {

@@ -6,10 +6,12 @@ import { CreatePlayerController } from './controllers/CreatePlayer.controller';
 import { GetPlayerController } from './controllers/GetPlayer.controller';
 import { LoginPlayerController } from './controllers/LoginPlayer.controller';
 import { RefreshTokenController } from './controllers/RefreshToken.controller';
+import { UpdateMasterNameController } from './controllers/UpdateMasterName.controller';
 import { CreatePlayerService } from './services/CreatePlayer.service';
 import { FindPlayerByIdService } from './services/FindPlayerById.service';
 import { LoginPlayerService } from './services/LoginPlayer.service';
 import { RefreshTokenService } from './services/RefreshToken.service';
+import { UpdateMasterNameService } from './services/UpdateMasterName.service';
 
 @Module({
   controllers: [
@@ -17,6 +19,7 @@ import { RefreshTokenService } from './services/RefreshToken.service';
     LoginPlayerController,
     GetPlayerController,
     RefreshTokenController,
+    UpdateMasterNameController,
   ],
   imports: [DatabaseModule, CryptographyModule, DateModule],
   providers: [
@@ -25,6 +28,7 @@ import { RefreshTokenService } from './services/RefreshToken.service';
     LoginPlayerService,
     FindPlayerByIdService,
     RefreshTokenService,
+    UpdateMasterNameService,
   ],
 })
 export class PlayerModule {}

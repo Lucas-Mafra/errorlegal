@@ -4,10 +4,7 @@ import { PlayerDTO } from '../dto/PlayerDTO';
 
 export class Player extends AggregateRoot<PlayerDTO> {
   constructor(
-    props: Optional<
-      PlayerDTO,
-      'createdAt' | 'updatedAt' | 'masterName' | 'characters' | 'gamesAsMaster'
-    >,
+    props: Optional<PlayerDTO, 'createdAt' | 'updatedAt' | 'masterName'>,
     id?: number,
   ) {
     const playerProps: PlayerDTO = {
@@ -16,8 +13,6 @@ export class Player extends AggregateRoot<PlayerDTO> {
       name: props.name,
       password: props.password,
       masterName: props.masterName ?? null,
-      characters: props.characters ?? [],
-      gamesAsMaster: props.gamesAsMaster ?? [],
     };
 
     super(playerProps, id);
@@ -56,14 +51,6 @@ export class Player extends AggregateRoot<PlayerDTO> {
   set masterName(masterName: string | null) {
     this.props.masterName = masterName;
     this.touch();
-  }
-
-  get characters() {
-    return this.props.characters;
-  }
-
-  get gamesAsMaster() {
-    return this.props.gamesAsMaster;
   }
 
   touch() {

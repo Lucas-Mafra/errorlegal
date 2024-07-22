@@ -1,5 +1,5 @@
 import { ErrorPresenter } from '@infra/presenters/Error.presenter';
-import { Controller, HttpCode, Post } from '@nestjs/common';
+import { Controller, Get, HttpCode } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from '@providers/auth/decorators/IsPublic.decorator';
 import { RefreshToken } from '@providers/auth/decorators/refreshToken.decorator';
@@ -13,7 +13,7 @@ export class RefreshTokenController {
   constructor(private readonly refreshTokenService: RefreshTokenService) {}
 
   @Public()
-  @Post()
+  @Get()
   @HttpCode(statusCode.OK)
   async handle(@RefreshToken() refreshToken: string) {
     const result = await this.refreshTokenService.execute(refreshToken);

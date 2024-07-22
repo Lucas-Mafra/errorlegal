@@ -7,7 +7,7 @@ export class PlayerPresenter {
       name: player.name,
       masterName: player.masterName,
       createdAt: player.createdAt,
-      gamesAsMaster: player.gamesAsMaster,
+      updatedAt: player.updatedAt,
     };
   }
 }

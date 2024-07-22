@@ -19,9 +19,10 @@ export class CreateGameController {
     @CurrentLoggedPlayer() { sub }: TokenPayloadSchema,
     @Body(CreateGameGateway) body: CreateGameDTO,
   ) {
+    console.log({ body });
     const result = await this.createGameService.execute({
       ...body,
-      masterId: sub,
+      sub,
     });
 
     if (result.isLeft()) {
