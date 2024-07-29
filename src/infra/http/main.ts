@@ -1,17 +1,32 @@
 import { env } from '@infra/env';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const origin = env.NODE_ENV === 'production' ? env.PROD_URL : env.DEV_URL;
+  const allowedOrigins = [env.PROD_URL, env.DEV_URL];
 
   app.use(helmet());
 
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    console.log(`Request received: ${req.method} ${req.url}`);
+    res.on('finish', () => {
+      console.log(`Response sent: ${res.statusCode}`);
+    });
+    next();
+  });
+
   app.enableCors({
-    origin,
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     methods: 'GET,PUT,PATCH,POST,DELETE',
     allowedHeaders: ['Content-Type', 'Authorization', 'refresh_token'],
