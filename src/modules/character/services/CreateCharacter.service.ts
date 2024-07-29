@@ -9,6 +9,7 @@ import { Either, left, right } from '@shared/core/errors/Either';
 import { CreateCharacterDTO } from '../dto/CreateCharacterDTO';
 import { Character } from '../entities/Character';
 import { NicknameAlreadyExistsError } from '../errors/NicknameAlreadyExistsError';
+import { PlayerAlreadyHasCharacterError } from '../errors/PlayerAlreadyHasCharacterError';
 import { CharacterRepository } from '../repositories/contracts/CharacterRepository';
 
 type Request = CreateCharacterDTO & TokenPayloadSchema;
@@ -16,7 +17,8 @@ type Request = CreateCharacterDTO & TokenPayloadSchema;
 type Errors =
   | PlayerNotFoundError
   | GameNotFoundError
-  | NicknameAlreadyExistsError;
+  | NicknameAlreadyExistsError
+  | PlayerAlreadyHasCharacterError;
 
 type Response = {
   character: Character;
@@ -49,8 +51,20 @@ export class CreateCharacterService
       return left(new GameNotFoundError());
     }
 
+    const hasCharacter = await this.characterRepository.hasCharacter(
+      sub,
+      gameId,
+    );
+
+    if (hasCharacter) {
+      return left(new PlayerAlreadyHasCharacterError());
+    }
+
     const _character =
-      await this.characterRepository.findUniqueByNickname(nickname);
+      await this.characterRepository.findUniqueByNicknameAndGameId(
+        nickname,
+        gameId,
+      );
 
     if (_character) {
       return left(new NicknameAlreadyExistsError());

@@ -13,7 +13,7 @@ import { UpdateGameService } from '../services/UpdateGame.service';
 export class UpdateGameController {
   constructor(private readonly updateGameService: UpdateGameService) {}
 
-  @Put()
+  @Put('update')
   @HttpCode(statusCode.NO_CONTENT)
   async handle(
     @CurrentLoggedPlayer() { sub }: TokenPayloadSchema,

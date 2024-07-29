@@ -15,7 +15,7 @@ export class UpdateCharacterController {
     private readonly updateCharacterService: UpdateCharacterService,
   ) {}
 
-  @Get(':characterId')
+  @Get('/update/:characterId')
   @HttpCode(statusCode.OK)
   async handle(
     @CurrentLoggedPlayer() { sub }: TokenPayloadSchema,

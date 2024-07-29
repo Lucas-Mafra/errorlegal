@@ -13,7 +13,7 @@ model Player {
   updatedAt  DateTime? @updatedAt @map("updated_at")
   name       String    @unique
   password   String    @map("password")
-  masterName String?   @unique @map("master_name")
+  masterName String?   @map("master_name")
 
   characters    Character[]
   gamesAsMaster Game[]
@@ -25,7 +25,7 @@ model Player {
 
 model Character {
   id        Int       @id @unique @default(autoincrement())
-  nickname  String    @unique
+  nickname  String
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   playerId  Int       @map("player_id")
@@ -34,6 +34,7 @@ model Character {
   Player Player @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   Game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
+  @@unique([nickname, gameId])
   @@map("characters")
 }
 
@@ -70,10 +71,11 @@ model Game {
 }
 
 model PlayerGame {
+  joinedAt DateTime @default(now()) @map("joined_at")
   playerId Int
   gameId   Int
-  Player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Game     Game   @relation(fields: [gameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Player   Player   @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  Game     Game     @relation(fields: [gameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([playerId, gameId])
   @@map("player_games")

@@ -4,22 +4,24 @@ import { ApiTags } from '@nestjs/swagger';
 import { CurrentLoggedPlayer } from '@providers/auth/decorators/CurrentLoggedPlayer.decorator';
 import { TokenPayloadSchema } from '@providers/auth/strategys/jwtStrategy';
 import { statusCode } from '@shared/core/types/statusCode';
-import { GamesPresenter } from '../presenters/Games.presenter';
-import { FindGamesByIdService } from '../services/FindGamesById.service';
+import { CharactersWithGameInfoPresenter } from '../presenters/CharactersWithGameInfo.presenter';
+import { FindCharacterByPlayerIdWithGameInfoService } from '../services/FindCharacterByPlayerIdWithGameInfo.service';
 
-@ApiTags('Game')
-@Controller('games')
-export class FindGamesByIdController {
-  constructor(private readonly findGamesByIdService: FindGamesByIdService) {}
+@ApiTags('Character')
+@Controller('character')
+export class FindCharacterByPlayerIdWithGameInfoController {
+  constructor(
+    private readonly findCharacterByPlayerIdWithGameInfo: FindCharacterByPlayerIdWithGameInfoService,
+  ) {}
 
-  @Get()
+  @Get('character-with-game-info')
   @HttpCode(statusCode.OK)
   async handle(
     @CurrentLoggedPlayer() { sub }: TokenPayloadSchema,
     @Query('page') page: string,
     @Query('pageSize') pageSize: string,
   ) {
-    const result = await this.findGamesByIdService.execute({
+    const result = await this.findCharacterByPlayerIdWithGameInfo.execute({
       sub,
       page: Number(page),
       pageSize: Number(pageSize),
@@ -29,8 +31,8 @@ export class FindGamesByIdController {
       return ErrorPresenter.toHTTP(result.value);
     }
 
-    const { games } = result.value;
+    const { characters } = result.value;
 
-    return games.map((game) => GamesPresenter.toHTTP(game));
+    return CharactersWithGameInfoPresenter.toHTTP(characters);
   }
 }

@@ -1,5 +1,6 @@
 import { Game } from '@modules/game/entities/Game';
 import { GameRepository } from '@modules/game/repositories/contracts/GameRepository';
+import { GameWithPlayerInfo } from '@modules/game/valueObjects/GameWithPlayerInfo';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { GameMapper } from './GameMapper';
@@ -8,15 +9,41 @@ import { GameMapper } from './GameMapper';
 export class GameRepositoryImplementation implements GameRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async hasPlayer(playerId: number, gameId: number): Promise<boolean> {
+    const playerGame = await this.prisma.playerGame.findFirst({
+      where: { playerId, gameId },
+    });
+
+    return Boolean(playerGame);
+  }
+
   async addPlayerToGame(playerId: number, gameId: number) {
     await this.prisma.playerGame.create({
-      data: { playerId, gameId },
+      data: { playerId, gameId, joinedAt: new Date() },
+    });
+
+    await this.prisma.game.update({
+      where: { id: gameId },
+      data: {
+        totalPlayers: {
+          increment: 1,
+        },
+      },
     });
   }
 
   async removePlayerFromGame(playerId: number, gameId: number) {
     await this.prisma.playerGame.deleteMany({
       where: { playerId, gameId },
+    });
+
+    await this.prisma.game.update({
+      where: { id: gameId },
+      data: {
+        totalPlayers: {
+          decrement: 1,
+        },
+      },
     });
   }
 
@@ -54,7 +81,47 @@ export class GameRepositoryImplementation implements GameRepository {
     return games.map((game) => GameMapper.toEntity(game.Game));
   }
 
+  async findManyByPlayerIdWithPlayerInfo(
+    playerId: number,
+    page: number,
+    pageSize: number,
+  ): Promise<GameWithPlayerInfo[]> {
+    const playerGames = await this.prisma.playerGame.findMany({
+      where: {
+        playerId,
+      },
+      include: {
+        Game: {
+          select: {
+            id: true,
+            name: true,
+            masterId: true,
+          },
+        },
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      orderBy: {
+        joinedAt: 'desc',
+      },
+    });
+
+    return playerGames.map((playerGame) => {
+      const game = playerGame.Game;
+
+      return GameMapper.toGameWithPlayerInfo({
+        playerJoinedAt: playerGame.joinedAt,
+        gameName: game.name,
+        gameMasterId: game.masterId,
+        gameId: game.id,
+        playerId: playerGame.playerId,
+        isMaster: playerGame.playerId === game.masterId,
+      });
+    });
+  }
+
   async findUniqueById(id: number): Promise<Game | null> {
+    console.log({ id });
     const game = await this.prisma.game.findUnique({
       where: {
         id,

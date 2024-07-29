@@ -15,7 +15,7 @@ export class FindCharacterByIdController {
     private readonly findCharacterByIdService: FindCharacterByIdService,
   ) {}
 
-  @Get(':characterId')
+  @Get('/find/:characterId')
   @HttpCode(statusCode.OK)
   async handle(
     @CurrentLoggedPlayer() { sub }: TokenPayloadSchema,

@@ -39,7 +39,15 @@ export class FindGameByIdService implements Service<Request, Errors, Response> {
       return left(new GameNotFoundError());
     }
 
-    if (!isMaster({ masterId: game.masterId, playerId: sub })) {
+    const isAlreadyParticipant = await this.gameRepository.hasPlayer(
+      sub,
+      gameId,
+    );
+
+    if (
+      !isMaster({ masterId: game.masterId, playerId: sub }) &&
+      !isAlreadyParticipant
+    ) {
       return left(new UnauthorizedError());
     }
 

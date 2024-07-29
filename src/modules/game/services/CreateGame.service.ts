@@ -29,7 +29,6 @@ export class CreateGameService implements Service<Request, Errors, Response> {
     imageUrl,
     sub,
   }: Request): Promise<Either<Errors, Response>> {
-    console.log({ name, description, imageUrl, sub });
     const player = await this.playerRepository.findUniqueById(sub);
 
     if (!player) {

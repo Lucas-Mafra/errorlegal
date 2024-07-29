@@ -40,8 +40,6 @@ export class RefreshTokenService implements Service<Request, Errors, Response> {
       return left(new SessionExpiredError());
     }
 
-    console.log({ isValid, payload });
-
     const id = payload.sub;
 
     const player = await this.playerRepository.findUniqueById(Number(id));
@@ -56,13 +54,11 @@ export class RefreshTokenService implements Service<Request, Errors, Response> {
         refreshTokenReceived,
       );
 
-    console.log({ lastRefreshTokenSaved });
-
     if (!lastRefreshTokenSaved) {
       return left(new SessionExpiredError());
     }
 
-    this.refreshTokensRepository.delete(lastRefreshTokenSaved.id);
+    await this.refreshTokensRepository.delete(lastRefreshTokenSaved.id);
 
     const accessToken = await this.encrypter.encrypt(
       {

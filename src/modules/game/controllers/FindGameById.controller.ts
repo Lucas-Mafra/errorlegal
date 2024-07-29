@@ -12,7 +12,7 @@ import { FindGameByIdService } from '../services/FindGameById.service';
 export class FindGameByIdController {
   constructor(private readonly findGameByIdService: FindGameByIdService) {}
 
-  @Get(':gameId')
+  @Get('/find/:gameId')
   @HttpCode(statusCode.OK)
   async handle(
     @CurrentLoggedPlayer() { sub }: TokenPayloadSchema,

@@ -1,4 +1,5 @@
 import { Game } from '@modules/game/entities/Game';
+import { GameWithPlayerInfo } from '@modules/game/valueObjects/GameWithPlayerInfo';
 
 export abstract class GameRepository {
   abstract findUniqueById(id: number): Promise<Game | null>;
@@ -9,7 +10,15 @@ export abstract class GameRepository {
     pageSize: number,
   ): Promise<Game[]>;
 
+  abstract findManyByPlayerIdWithPlayerInfo(
+    playerId: number,
+    page: number,
+    pageSize: number,
+  ): Promise<GameWithPlayerInfo[]>;
+
   abstract addPlayerToGame(playerId: number, gameId: number): Promise<void>;
+
+  abstract hasPlayer(playerId: number, gameId: number): Promise<boolean>;
 
   abstract removePlayerFromGame(
     playerId: number,
