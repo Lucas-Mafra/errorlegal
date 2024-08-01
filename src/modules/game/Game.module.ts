@@ -4,6 +4,7 @@ import { CheckParticipationController } from './controllers/CheckParticipation.c
 import { CreateGameController } from './controllers/CreateGame.controller';
 import { DeleteGameController } from './controllers/DeleteGame.controller';
 import { FindGameByIdController } from './controllers/FindGameById.controller';
+import { FindGameByIdWithMasterInfoController } from './controllers/FindGameByIdWithMasterInfo.controller';
 import { FindGameByInviteCodeController } from './controllers/FindGameByInviteCode.controller';
 import { FindGamesByPlayerIdWithPlayerInfoController } from './controllers/FindGamesByPlayerId.controller';
 import { JoinGameController } from './controllers/JoinGame.controller';
@@ -13,6 +14,7 @@ import { CheckParticipationService } from './services/CheckParticipation.service
 import { CreateGameService } from './services/CreateGame.service';
 import { DeleteGameService } from './services/DeleteGame.service';
 import { FindGameByIdService } from './services/FindGameById.service';
+import { FindGameByIdWithMasterInfoService } from './services/FindGameByIdWithMasterInfoService.service';
 import { FindGameByInviteCodeService } from './services/FindGameByInviteCode.service';
 import { FindGamesByPlayerIdWithPlayerInfoServiceService } from './services/FindGamesByPlayerIdWithPlayerInfoService.service';
 import { JoinGameService } from './services/JoinGame.service';
@@ -25,6 +27,7 @@ import { UpdateGameService } from './services/UpdateGame.service';
     CreateGameController,
     FindGameByIdController,
     FindGamesByPlayerIdWithPlayerInfoController,
+    FindGameByIdWithMasterInfoController,
     FindGameByInviteCodeController,
     JoinGameController,
     LeaveGameController,
@@ -37,6 +40,7 @@ import { UpdateGameService } from './services/UpdateGame.service';
     CreateGameService,
     FindGameByIdService,
     FindGamesByPlayerIdWithPlayerInfoServiceService,
+    FindGameByIdWithMasterInfoService,
     FindGameByInviteCodeService,
     JoinGameService,
     LeaveGameService,
