@@ -1,8 +1,13 @@
 import { Game } from '@modules/game/entities/Game';
+import { GameWithMasterInfo } from '@modules/game/valueObjects/GameWithMasterInfo';
 import { GameWithPlayerInfo } from '@modules/game/valueObjects/GameWithPlayerInfo';
 
 export abstract class GameRepository {
   abstract findUniqueById(id: number): Promise<Game | null>;
+
+  abstract findUniqueByIdWithMasterInfo(
+    id: number,
+  ): Promise<GameWithMasterInfo | null>;
 
   abstract findManyByPlayerId(
     playerId: number,

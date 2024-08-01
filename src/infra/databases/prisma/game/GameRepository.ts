@@ -1,5 +1,6 @@
 import { Game } from '@modules/game/entities/Game';
 import { GameRepository } from '@modules/game/repositories/contracts/GameRepository';
+import { GameWithMasterInfo } from '@modules/game/valueObjects/GameWithMasterInfo';
 import { GameWithPlayerInfo } from '@modules/game/valueObjects/GameWithPlayerInfo';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
@@ -8,6 +9,32 @@ import { GameMapper } from './GameMapper';
 @Injectable()
 export class GameRepositoryImplementation implements GameRepository {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findUniqueByIdWithMasterInfo(
+    id: number,
+  ): Promise<GameWithMasterInfo | null> {
+    const gameWithMasterInfo = await this.prisma.game.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        master: {
+          select: {
+            id: true,
+            masterName: true,
+          },
+        },
+      },
+    });
+
+    return gameWithMasterInfo
+      ? GameMapper.toGameWithMasterInfo({
+          ...gameWithMasterInfo,
+          masterId: gameWithMasterInfo.master.id,
+          masterName: gameWithMasterInfo.master.masterName!,
+        })
+      : null;
+  }
 
   async hasPlayer(playerId: number, gameId: number): Promise<boolean> {
     const playerGame = await this.prisma.playerGame.findFirst({
@@ -121,7 +148,6 @@ export class GameRepositoryImplementation implements GameRepository {
   }
 
   async findUniqueById(id: number): Promise<Game | null> {
-    console.log({ id });
     const game = await this.prisma.game.findUnique({
       where: {
         id,

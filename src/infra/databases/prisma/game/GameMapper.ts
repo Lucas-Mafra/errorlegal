@@ -1,9 +1,12 @@
+import { GameWithMasterInfoDTO } from '@modules/game/dto/GameWithMasterInfoDTO';
 import { GameWithPlayerInfoDTO } from '@modules/game/dto/GameWithPlayerInfoDTO';
 import { Game } from '@modules/game/entities/Game';
+import { GameWithMasterInfo } from '@modules/game/valueObjects/GameWithMasterInfo';
 import { GameWithPlayerInfo } from '@modules/game/valueObjects/GameWithPlayerInfo';
 import { Game as GamePrisma, Prisma } from '@prisma/client';
 
 type GameWithPlayerInfoPrisma = GameWithPlayerInfoDTO;
+type GameWithMasterInfoPrisma = GameWithMasterInfoDTO;
 export class GameMapper {
   static toEntity(raw: GamePrisma): Game {
     return new Game(
@@ -33,6 +36,23 @@ export class GameMapper {
       gameId: raw.gameId,
       playerId: raw.playerId,
       isMaster: raw.isMaster,
+    });
+  }
+
+  static toGameWithMasterInfo(
+    raw: GameWithMasterInfoPrisma,
+  ): GameWithMasterInfo {
+    return new GameWithMasterInfo({
+      id: raw.id,
+      createdAt: raw.createdAt,
+      updatedAt: raw.updatedAt as Date,
+      inviteCode: raw.inviteCode,
+      name: raw.name,
+      description: raw.description,
+      imageUrl: raw.imageUrl,
+      totalPlayers: raw.totalPlayers,
+      masterId: raw.masterId,
+      masterName: raw.masterName,
     });
   }
 
