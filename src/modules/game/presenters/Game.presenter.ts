@@ -4,9 +4,9 @@ export class GamerPresenter {
   static toHTTP(game: Game) {
     return {
       game: {
+        id: game.id,
         createdAt: game.createdAt,
         updatedAt: game.updatedAt,
-        id: game.id,
         masterId: game.masterId,
         inviteCode: game.inviteCode,
         name: game.name,
