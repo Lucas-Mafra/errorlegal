@@ -1,5 +1,5 @@
 import { ErrorPresenter } from '@infra/presenters/Error.presenter';
-import { Body, Controller, HttpCode, Put } from '@nestjs/common';
+import { Body, Controller, HttpCode, Param, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CurrentLoggedPlayer } from '@providers/auth/decorators/CurrentLoggedPlayer.decorator';
 import { TokenPayloadSchema } from '@providers/auth/strategys/jwtStrategy';
@@ -13,14 +13,16 @@ import { UpdateGameService } from '../services/UpdateGame.service';
 export class UpdateGameController {
   constructor(private readonly updateGameService: UpdateGameService) {}
 
-  @Put('update')
+  @Put('update/:gameId')
   @HttpCode(statusCode.NO_CONTENT)
   async handle(
     @CurrentLoggedPlayer() { sub }: TokenPayloadSchema,
     @Body(UpdateGameGateway) body: UpdateGameDTO,
+    @Param('gameId') gameId: string,
   ) {
     const result = await this.updateGameService.execute({
       ...body,
+      gameId: Number(gameId),
       sub,
     });
 

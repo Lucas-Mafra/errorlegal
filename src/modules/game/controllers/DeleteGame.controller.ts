@@ -4,8 +4,6 @@ import { ApiTags } from '@nestjs/swagger';
 import { CurrentLoggedPlayer } from '@providers/auth/decorators/CurrentLoggedPlayer.decorator';
 import { TokenPayloadSchema } from '@providers/auth/strategys/jwtStrategy';
 import { statusCode } from '@shared/core/types/statusCode';
-import { DeleteGameDTO } from '../dto/DeleteGameDTO';
-import { DeleteGameGateway } from '../gateways/DeleteGame.gateway';
 import { DeleteGameService } from '../services/DeleteGame.service';
 
 @ApiTags('Game')
@@ -13,14 +11,14 @@ import { DeleteGameService } from '../services/DeleteGame.service';
 export class DeleteGameController {
   constructor(private readonly deleteGameService: DeleteGameService) {}
 
-  @Delete('delete')
+  @Delete('delete/:gameId')
   @HttpCode(statusCode.OK)
   async handle(
     @CurrentLoggedPlayer() { sub }: TokenPayloadSchema,
-    @Param(DeleteGameGateway) param: DeleteGameDTO,
+    @Param('gameId') param: string,
   ) {
     const result = await this.deleteGameService.execute({
-      gameId: param.gameId,
+      gameId: Number(param),
       sub,
     });
 
