@@ -1,6 +1,4 @@
-import { CharacterModule } from '@modules/character/Character.module';
-import { GameModule } from '@modules/game/Game.module';
-import { PlayerModule } from '@modules/player/Player.module';
+import { UserModule } from '@modules/user/User.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@providers/auth/Auth.module';
@@ -11,9 +9,7 @@ import { CryptographyModule } from '@providers/cryptography/Cryptography.module'
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     CryptographyModule,
-    PlayerModule,
-    GameModule,
-    CharacterModule,
+    UserModule,
   ],
 })
 export class AppModule {}

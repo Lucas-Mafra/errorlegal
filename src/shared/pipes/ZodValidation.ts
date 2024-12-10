@@ -18,13 +18,13 @@ export class ZodValidationPipe implements PipeTransform {
       if (err instanceof ZodError) {
         throw new BadRequestException({
           details: { errors: fromZodError(err) },
-          message: 'Cant be validate received data',
+          message: 'Dado recebido não pôde ser validado',
           title: 'Validation error',
           status: statusCode.BAD_REQUEST,
         });
       }
 
-      throw new BadRequestException('Cant be validate received data');
+      throw new BadRequestException('Dado recebido não pôde ser validado');
     }
   }
 }

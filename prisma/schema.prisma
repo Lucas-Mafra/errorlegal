@@ -7,35 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Player {
-  id         Int       @id @unique @default(autoincrement())
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime? @updatedAt @map("updated_at")
-  name       String    @unique
-  password   String    @map("password")
-  masterName String?   @map("master_name")
-
-  characters    Character[]
-  gamesAsMaster Game[]
-  RefreshToken  RefreshToken[]
-  games         PlayerGame[]
-
-  @@map("players")
-}
-
-model Character {
+model User {
   id        Int       @id @unique @default(autoincrement())
-  nickname  String
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
-  playerId  Int       @map("player_id")
-  gameId    Int       @map("game_id")
+  name      String    @unique
+  password  String    @map("password")
 
-  Player Player @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  RefreshToken RefreshToken[]
 
-  @@unique([nickname, gameId])
-  @@map("characters")
+  @@map("users")
 }
 
 model RefreshToken {
@@ -43,40 +24,9 @@ model RefreshToken {
   token     String
   expiresIn DateTime @map("expires_in")
   createdAt DateTime @default(now()) @map("created_at")
-  playerId  Int      @map("player_id")
+  userId    Int      @map("user_id")
 
-  Player Player @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  User User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("refresh_tokens")
-}
-
-model Game {
-  id            Int       @id @unique @default(autoincrement())
-  inviteCode    String    @unique @default(cuid()) @map("invite_code")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime? @updatedAt @map("updated_at")
-  name          String
-  description   String    @map("description")
-  imageUrl      String?   @map("image_url")
-  isActive      Boolean   @default(true) @map("is_active")
-  totalPlayers  Int       @map("total_players")
-  activePlayers Int       @map("active_players")
-  masterId      Int       @map("master_id")
-
-  characters Character[]
-  master     Player       @relation(fields: [masterId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  players    PlayerGame[]
-
-  @@map("games")
-}
-
-model PlayerGame {
-  joinedAt DateTime @default(now()) @map("joined_at")
-  playerId Int
-  gameId   Int
-  Player   Player   @relation(fields: [playerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  Game     Game     @relation(fields: [gameId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  @@id([playerId, gameId])
-  @@map("player_games")
 }

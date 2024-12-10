@@ -1,40 +1,22 @@
-import { CharacterRepository } from '@modules/character/repositories/contracts/CharacterRepository';
-import { GameRepository } from '@modules/game/repositories/contracts/GameRepository';
-import { PlayerRepository } from '@modules/player/repositories/contracts/PlayerRepository';
-import { RefreshTokensRepository } from '@modules/player/repositories/contracts/RefreshTokenRepository';
+import { RefreshTokensRepository } from '@modules/user/repositories/contracts/RefreshTokenRepository';
+import { UserRepository } from '@modules/user/repositories/contracts/UserRepository';
 import { Module } from '@nestjs/common';
-import { CharacterRepositoryImplementation } from './prisma/character/CharacterRepository';
-import { GameRepositoryImplementation } from './prisma/game/GameRepository';
-import { PlayerRepositoryImplementation } from './prisma/player/PlayerRepository';
-import { RefreshTokensRepositoryImplementation } from './prisma/player/RefreshTokensRepositoryImplementation';
 import { PrismaService } from './prisma/prisma.service';
+import { RefreshTokensRepositoryImplementation } from './prisma/user/RefreshTokensRepositoryImplementation';
+import { UserRepositoryImplementation } from './prisma/user/UserRepository';
 
 @Module({
   providers: [
     PrismaService,
     {
-      provide: PlayerRepository,
-      useClass: PlayerRepositoryImplementation,
+      provide: UserRepository,
+      useClass: UserRepositoryImplementation,
     },
     {
       provide: RefreshTokensRepository,
       useClass: RefreshTokensRepositoryImplementation,
     },
-    {
-      provide: GameRepository,
-      useClass: GameRepositoryImplementation,
-    },
-    {
-      provide: CharacterRepository,
-      useClass: CharacterRepositoryImplementation,
-    },
   ],
-  exports: [
-    PrismaService,
-    PlayerRepository,
-    RefreshTokensRepository,
-    GameRepository,
-    CharacterRepository,
-  ],
+  exports: [PrismaService, UserRepository, RefreshTokensRepository],
 })
 export class DatabaseModule {}

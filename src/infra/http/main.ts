@@ -33,8 +33,8 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('Fable to Table')
-    .setDescription('The Fable to Table API description')
+    .setTitle('My project')
+    .setDescription('The My project API description')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
