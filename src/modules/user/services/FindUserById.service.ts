@@ -3,7 +3,7 @@ import { TokenPayloadSchema } from '@providers/auth/strategys/jwtStrategy';
 import { Service } from '@shared/core/contracts/Service';
 import { Either, left, right } from '@shared/core/errors/Either';
 import { User } from '../entities/User';
-import { NickNameAlreadyExistsError } from '../errors/NickNameAlreadyExistsError';
+import { NameAlreadyExistsError } from '../errors/NameAlreadyExistsError';
 import { UserNotFoundError } from '../errors/UserNotFoundError';
 import { UserRepository } from '../repositories/contracts/UserRepository';
 
@@ -21,8 +21,8 @@ export class FindUserByIdService implements Service<Request, Errors, Response> {
 
   async execute({
     sub,
-  }: Request): Promise<Either<NickNameAlreadyExistsError, Response>> {
-    const user = await this.userRepository.findUniqueById(sub);
+  }: Request): Promise<Either<NameAlreadyExistsError, Response>> {
+    const user = await this.userRepository.findUnique(sub);
 
     if (!user) {
       return left(new UserNotFoundError());
