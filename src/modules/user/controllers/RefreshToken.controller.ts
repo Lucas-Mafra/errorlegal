@@ -8,12 +8,12 @@ import { TokensPresenter } from '../presenters/LoginUser.presenter';
 import { RefreshTokenService } from '../services/RefreshToken.service';
 
 @ApiTags('Token')
-@Controller('refresh')
+@Controller('user')
 export class RefreshTokenController {
   constructor(private readonly refreshTokenService: RefreshTokenService) {}
 
   @Public()
-  @Get()
+  @Get('auth/refresh')
   @HttpCode(statusCode.OK)
   async handle(@RefreshToken() refreshToken: string) {
     const result = await this.refreshTokenService.execute(refreshToken);
