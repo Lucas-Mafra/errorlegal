@@ -1,7 +1,7 @@
 export abstract class Repository<T, K = unknown> {
   abstract create(data: T, ctx?: K): Promise<void>;
-  abstract findById(id: number, ctx?: K): Promise<T | null>;
-  abstract findAll(ctx?: K): Promise<T[]>;
+  abstract findUnique(id: number, ctx?: K): Promise<T | null>;
+  abstract findMany(ctx?: K): Promise<T[]>;
   abstract save(data: T, ctx?: K): Promise<void>;
   abstract delete(id: number, ctx?: K): Promise<void>;
 }
