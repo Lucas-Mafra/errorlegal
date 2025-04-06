@@ -4,12 +4,12 @@ import { Service } from '@shared/core/contracts/Service';
 import { Either, left, right } from '@shared/core/errors/Either';
 import { CreateUserDTO } from '../dto/CreateUserDTO';
 import { User } from '../entities/User';
-import { NickNameAlreadyExistsError } from '../errors/NickNameAlreadyExistsError';
+import { NameAlreadyExistsError } from '../errors/NameAlreadyExistsError';
 import { UserRepository } from '../repositories/contracts/UserRepository';
 
 type Request = CreateUserDTO;
 
-type Errors = NickNameAlreadyExistsError;
+type Errors = NameAlreadyExistsError;
 
 type Response = {
   user: User;
@@ -26,11 +26,10 @@ export class CreateUserService implements Service<Request, Errors, Response> {
     name,
     password,
   }: CreateUserDTO): Promise<Either<Errors, Response>> {
-    const nickNameAlreadyExists =
-      await this.userRepository.findUniqueByName(name);
+    const nameAlreadyExists = await this.userRepository.findUniqueByName(name);
 
-    if (nickNameAlreadyExists) {
-      return left(new NickNameAlreadyExistsError());
+    if (nameAlreadyExists) {
+      return left(new NameAlreadyExistsError());
     }
 
     const hashedPassword = await this.hashGenerator.hash(password);
