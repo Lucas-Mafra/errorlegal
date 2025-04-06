@@ -9,6 +9,13 @@ export class RefreshTokensRepositoryImplementation
   implements RefreshTokensRepository
 {
   constructor(private readonly prisma: PrismaService) {}
+  async findMany(): Promise<RefreshToken[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  async save(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 
   async create(refreshToken: RefreshToken): Promise<void> {
     await this.prisma.refreshToken.create({
@@ -16,7 +23,7 @@ export class RefreshTokensRepositoryImplementation
     });
   }
 
-  async findUniqueByUserIdAndToken(
+  async findUnique(
     userId: number,
     token: string,
   ): Promise<RefreshToken | null> {

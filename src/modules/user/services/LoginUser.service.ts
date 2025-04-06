@@ -71,7 +71,7 @@ export class LoginUserService implements Service<Request, Errors, Response> {
       userId: user.id,
       token: _refreshToken,
       expiresIn: this.dateAddition.addDaysInCurrentDate(
-        env.PLAYER_REFRESH_EXPIRES_IN,
+        env.USER_REFRESH_EXPIRES_IN,
       ),
     });
 

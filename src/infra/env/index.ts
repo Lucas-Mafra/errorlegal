@@ -13,7 +13,7 @@ const envSchema = z.object({
   JWT_PUBLIC_KEY: z.string(),
   JWT_USER_ACCESS_EXPIRES_IN: z.string(),
   JWT_USER_REFRESH_EXPIRES_IN: z.string(),
-  PLAYER_REFRESH_EXPIRES_IN: z.coerce.number(),
+  USER_REFRESH_EXPIRES_IN: z.coerce.number(),
 });
 
 type EnvSchema = z.infer<typeof envSchema>;

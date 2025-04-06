@@ -81,7 +81,7 @@ export class RefreshTokenService implements Service<Request, Errors, Response> {
       userId: player.id,
       token: _refreshToken,
       expiresIn: this.dateAddition.addDaysInCurrentDate(
-        env.PLAYER_REFRESH_EXPIRES_IN,
+        env.USER_REFRESH_EXPIRES_IN,
       ),
     });
 
