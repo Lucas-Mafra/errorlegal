@@ -14,7 +14,7 @@ export class LoginUserController {
   constructor(private readonly loginUserService: LoginUserService) {}
 
   @Public()
-  @Post('login')
+  @Post('auth')
   @HttpCode(statusCode.OK)
   async handle(@Body(LoginUserGateway) body: LoginUserDTO) {
     const result = await this.loginUserService.execute(body);
