@@ -42,17 +42,16 @@ export class RefreshTokenService implements Service<Request, Errors, Response> {
 
     const id = payload.sub;
 
-    const player = await this.playerRepository.findUniqueById(Number(id));
+    const player = await this.playerRepository.findUnique(Number(id));
 
     if (!player) {
       return left(new UserNotFoundError());
     }
 
-    const lastRefreshTokenSaved =
-      await this.refreshTokensRepository.findUniqueByUserIdAndToken(
-        Number(id),
-        refreshTokenReceived,
-      );
+    const lastRefreshTokenSaved = await this.refreshTokensRepository.findUnique(
+      Number(id),
+      refreshTokenReceived,
+    );
 
     if (!lastRefreshTokenSaved) {
       return left(new SessionExpiredError());
