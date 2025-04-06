@@ -8,7 +8,11 @@ import { UserMapper } from './UserMapper';
 export class UserRepositoryImplementation implements UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findUniqueById(id: number): Promise<User | null> {
+  async findMany(): Promise<User[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  async findUnique(id: number): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         id,
@@ -24,7 +28,7 @@ export class UserRepositoryImplementation implements UserRepository {
     });
   }
 
-  async update(user: User): Promise<void> {
+  async save(user: User): Promise<void> {
     await this.prisma.user.update({
       where: {
         id: user.id as number,
